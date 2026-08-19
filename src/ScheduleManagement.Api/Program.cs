@@ -4,6 +4,7 @@ using ScheduleManagement.Api.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
 
 // Dependency Injection
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -20,6 +21,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection(); // Middleware
+
+app.MapControllers();
 
 app.Run();
 
