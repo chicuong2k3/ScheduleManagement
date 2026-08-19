@@ -1,0 +1,64 @@
+# ===== .NET build artifacts =====
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.tmp
+*.log
+*.tlb
+*.tlc
+*.tlh
+*.bak
+*.nupkg
+*.snupkg
+*.cache
+*.pdb
+*.lib
+*.dll
+*.exe
+*.dSYM
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.ipch
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# ===== Visual Studio =====
+.vs/
+.vscode/
+.idea/
+*.VisualState.xml
+TestResult.xml
+[Tt]est[Rr]esult*/
+
+# ===== NuGet / packages =====
+*.nupkg
+*.snupkg
+packages/
+*.nuget.g.props
+*.nuget.g.targets
+
+# ===== Test results =====
+[Tt]est[Rr]esult*/
+*.trx
+coverage/
+*.coverage
+*.coveragexml
+
+# ===== Rider / JetBrains =====
+.idea/
+*.sln.iml
+
+# ===== Publish output =====
+publish/
+*.publish.xml
