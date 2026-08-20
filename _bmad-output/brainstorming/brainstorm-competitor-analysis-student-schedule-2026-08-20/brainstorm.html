@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScheduleScope — Competitive Landscape Map</title>
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --panel: #121827;
+    --panel2: #1a2335;
+    --ink: #e8edf7;
+    --muted: #8b96ab;
+    --line: #24304a;
+    --violet: #8b7cf7;
+    --cyan: #4dd6e8;
+    --amber: #f7c45f;
+    --rose: #f76f8e;
+    --green: #5ce0a0;
+    --red: #ff5d5d;
+    --blue: #5d9dff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  .hero {
+    padding: 60px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% -20%, rgba(139,124,247,.18), transparent 60%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(120deg, var(--violet), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero .tagline {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-top: 12px;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+  .hero .arch {
+    margin-top: 20px;
+    display: inline-block;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 20px;
+    color: var(--cyan);
+    font-weight: 600;
+    font-size: .95rem;
+  }
+  section { margin: 48px 0; }
+  .sec-head {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sec-head .idx {
+    background: var(--violet);
+    color: #fff;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: grid; place-items: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .sec-sub { color: var(--muted); margin-bottom: 20px; }
+
+  /* ── Territory map ─────────────────────────── */
+  .map {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .quadrant {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 20px;
+    position: relative;
+    transition: transform .2s;
+  }
+  .quadrant:hover { transform: translateY(-3px); }
+  .quadrant h3 {
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: .78rem;
+    color: var(--ink);
+    margin: 3px;
+  }
+  .chip b { font-weight: 600; }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .q-b2c-global { border-top: 3px solid var(--cyan); }
+  .q-b2c-vn { border-top: 3px solid var(--amber); }
+  .q-b2b-global { border-top: 3px solid var(--violet); }
+  .q-b2b-vn { border-top: 3px solid var(--rose); }
+  .q-label {
+    position: absolute; top: -11px; left: 16px;
+    background: var(--bg); padding: 0 8px;
+    font-size: .72rem; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--muted);
+  }
+  .empty-note {
+    grid-column: 1 / -1;
+    background: var(--panel);
+    border: 1px dashed var(--violet);
+    border-radius: 14px;
+    padding: 16px 20px;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+  .empty-note b { color: var(--violet); }
+
+  /* ── Tables ───────────────────────────────── */
+  .tbl-scroll { overflow-x: auto; border-radius: 14px; border: 1px solid var(--line); }
+  table { border-collapse: collapse; width: 100%; min-width: 760px; background: var(--panel); }
+  th {
+    background: var(--panel2);
+    text-align: left;
+    padding: 12px 14px;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    position: sticky; top: 0;
+    white-space: nowrap;
+  }
+  td { padding: 11px 14px; border-top: 1px solid var(--line); font-size: .86rem; vertical-align: top; }
+  tr:hover td { background: rgba(139,124,247,.06); }
+  .num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .good { color: var(--green); font-weight: 600; }
+  .bad { color: var(--red); }
+  .warn { color: var(--amber); }
+  .learn { color: var(--cyan); font-size: .82rem; }
+  .ncopy { color: var(--rose); font-size: .82rem; }
+  .col-name { font-weight: 600; white-space: nowrap; }
+
+  /* ── Learn / Not-copy ─────────────────────── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .card.learn { border-top: 3px solid var(--green); }
+  .card.ncopy { border-top: 3px solid var(--red); }
+  .card h3 { margin-bottom: 12px; font-size: 1.05rem; }
+  .card ul { list-style: none; }
+  .card li {
+    padding: 8px 0 8px 24px;
+    position: relative;
+    font-size: .9rem;
+    border-bottom: 1px solid rgba(36,48,74,.5);
+  }
+  .card li:last-child { border-bottom: none; }
+  .card.learn li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+  .card.ncopy li::before { content: '✕'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+  .card li small { color: var(--muted); display: block; font-size: .78rem; margin-top: 2px; }
+
+  /* ── Build roadmap ────────────────────────── */
+  .roadmap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .phase {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px;
+    position: relative;
+    transition: transform .2s;
+  }
+  .phase:hover { transform: translateY(-3px); }
+  .phase .pnum {
+    font-size: 2rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .phase h4 { margin: 8px 0 10px; font-size: 1rem; }
+  .phase p { font-size: .82rem; color: var(--muted); }
+  .phase .arrow {
+    position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
+    color: var(--violet); font-size: 1.2rem; z-index: 2;
+  }
+  .phase:last-child .arrow { display: none; }
+  .phase .tag {
+    display: inline-block; font-size: .7rem; text-transform: uppercase;
+    letter-spacing: .06em; padding: 3px 10px; border-radius: 999px;
+    margin-bottom: 8px; font-weight: 600;
+  }
+  .tag.free { background: rgba(92,224,160,.15); color: var(--green); }
+  .tag.paid { background: rgba(247,196,95,.15); color: var(--amber); }
+  .tag.viral { background: rgba(77,214,232,.15); color: var(--cyan); }
+  .tag.scale { background: rgba(139,124,247,.15); color: var(--violet); }
+
+  /* ── Gap chasm ────────────────────────────── */
+  .chasm { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 24px; overflow: hidden; }
+  .chasm::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(-45deg, transparent 0 18px, rgba(139,124,247,.04) 18px 36px);
+    pointer-events: none;
+  }
+  .chasm h3 { margin-bottom: 16px; position: relative; }
+  .chasm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; position: relative; }
+  .chasm-col { padding: 12px 16px; position: relative; z-index: 1; }
+  .chasm-col.left { border-right: 2px dashed var(--violet); }
+  .chasm-col h4 {
+    font-size: .8rem; text-transform: uppercase; letter-spacing: .1em;
+    margin-bottom: 14px;
+  }
+  .chasm-col.left h4 { color: var(--red); }
+  .chasm-col.right h4 { color: var(--green); }
+  .chasm-item {
+    background: var(--panel2);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: .82rem;
+    border: 1px solid var(--line);
+  }
+  .chasm-item.sat { border-left: 3px solid var(--red); color: var(--muted); }
+  .chasm-item.open { border-left: 3px solid var(--green); }
+  .chasm-item b { color: var(--ink); }
+  .bridge {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: var(--violet); color: #fff;
+    padding: 10px 18px; border-radius: 999px;
+    font-weight: 700; font-size: .85rem;
+    box-shadow: 0 8px 30px rgba(139,124,247,.4);
+    z-index: 3;
+    text-align: center;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  /* ── Synthesis ────────────────────────────── */
+  .synthesis {
+    background: linear-gradient(160deg, #1a1230, #0e1a2c);
+    border: 1px solid var(--violet);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .synthesis::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(139,124,247,.15), transparent 50%);
+  }
+  .synthesis h2 { font-size: 1.8rem; margin-bottom: 6px; position: relative; }
+  .synthesis .lead { color: var(--muted); margin-bottom: 20px; position: relative; }
+  .syn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; position: relative; }
+  .syn-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(139,124,247,.25);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .syn-card .letter {
+    width: 34px; height: 34px; border-radius: 9px;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  .syn-card.a .letter { background: var(--violet); color: #fff; }
+  .syn-card.b .letter { background: var(--cyan); color: #06121a; }
+  .syn-card.c .letter { background: var(--amber); color: #221a00; }
+  .syn-card h4 { margin-bottom: 8px; }
+  .syn-card p { font-size: .84rem; color: var(--muted); }
+  .anti {
+    margin-top: 20px;
+    background: rgba(255,93,93,.07);
+    border: 1px solid rgba(255,93,93,.25);
+    border-radius: 14px;
+    padding: 16px 18px;
+    position: relative;
+    font-size: .86rem;
+  }
+  .anti b { color: var(--red); }
+  .anti .anti-tags { margin-top: 8px; }
+  .anti .chip { background: rgba(255,93,93,.1); border-color: rgba(255,93,93,.3); }
+
+  /* ── Numbers strip ────────────────────────── */
+  .strip {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  }
+  .stat {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px; text-align: center;
+  }
+  .stat .v {
+    font-size: 1.7rem; font-weight: 800;
+    background: linear-gradient(120deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat .l { color: var(--muted); font-size: .78rem; margin-top: 4px; }
+
+  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 40px 0 20px; border-top: 1px solid var(--line); margin-top: 48px; }
+
+  @media (max-width: 900px) {
+    .map, .two-col, .chasm-grid { grid-template-columns: 1fr; }
+    .chasm-col.left { border-right: none; border-bottom: 2px dashed var(--violet); }
+    .roadmap { grid-template-columns: 1fr; }
+    .syn-grid { grid-template-columns: 1fr; }
+    .strip { grid-template-columns: 1fr 1fr; }
+    .bridge { position: static; transform: none; margin: 14px auto; display: block; width: fit-content; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>ScheduleScope</h1>
+  <p class="tagline">Competitive landscape map for a mobile-first student life-planner with a tutor-management vertical — Vietnam + global, App Store + Google Play + web.</p>
+  <div class="arch">⚙️ One engine · 🧑‍🎓 Two roles · 🪟 Three windows</div>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. Territory map -->
+  <section>
+    <div class="sec-head"><span class="idx">1</span> The Territory</div>
+    <div class="sec-sub">Four quadrants of the schedule-management landscape — who sits where</div>
+    <div class="map">
+      <div class="quadrant q-b2c-global">
+        <div class="q-label">B2C · Global</div>
+        <h3>🧑‍🎓 Student planners</h3>
+        <span class="chip"><span class="dot" style="background:var(--cyan)"></span><b>MyStudyLife</b> 4.7★</span>
+        <span class="chip"><span class="dot" style="background:var(--cyan)"></span><b>myHomework</b> 4.6★</span>
+        <span class="chip"><span class="dot" style="background:var(--cyan)"></span><b>Power Planner</b></span>
+        <span class="chip"><span class="dot" style="background:var(--cyan)"></span><b>Weeklie</b> offline</span>
+        <span class="chip"><span class="dot" style="background:var(--cyan)"></span><b>Student Trove</b></span>
+        <span class="chip"><span class="dot" style="background:var(--cyan)"></span><b>iStudiez Pro</b> 💀 dead</span>
+        <span class="chip"><span class="dot" style="background:var(--cyan)"></span><b>ClassUp</b> 4.3★</span>
+        <span class="chip"><span class="dot" style="background:var(--cyan)"></span><b>Egenda</b></span>
+      </div>
+      <div class="quadrant q-b2c-vn">
+        <div class="q-label">B2C · Vietnam</div>
+        <h3>🇻🇳 Local planners</h3>
+        <span class="chip"><span class="dot" style="background:var(--amber)"></span><b>Lịch Học</b> lichhoc.com.vn</span>
+        <span class="chip"><span class="dot" style="background:var(--amber)"></span><b>Elisa</b></span>
+        <span class="chip"><span class="dot" style="background:var(--amber)"></span><b>vnEdu-TKB</b></span>
+        <span class="chip"><span class="dot" style="background:var(--amber)"></span><b>Folderly</b></span>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:10px">Thin feature set. No tutor/parent side. <span class="learn">→ open territory</span></p>
+      </div>
+      <div class="quadrant q-b2b-global">
+        <div class="q-label">B2B · Global</div>
+        <h3>🏢 Tutor/center tools <span style="font-size:.72rem;color:var(--red)">(7/8 web-only)</span></h3>
+        <span class="chip"><span class="dot" style="background:var(--violet)"></span><b>TutorCruncher</b> $30–240</span>
+        <span class="chip"><span class="dot" style="background:var(--violet)"></span><b>Teachworks</b> 📵 no mobile</span>
+        <span class="chip"><span class="dot" style="background:var(--violet)"></span><b>Classcard</b> $99 flat</span>
+        <span class="chip"><span class="dot" style="background:var(--violet)"></span><b>Tutorbase</b> web-only</span>
+        <span class="chip"><span class="dot" style="background:var(--violet)"></span><b>TutorBird</b></span>
+        <span class="chip"><span class="dot" style="background:var(--violet)"></span><b>Oases</b></span>
+        <span class="chip"><span class="dot" style="background:var(--violet)"></span><b>Wise</b> ✅ white-label apps</span>
+        <span class="chip"><span class="dot" style="background:var(--violet)"></span><b>Fons</b></span>
+      </div>
+      <div class="quadrant q-b2b-vn">
+        <div class="q-label">B2B · Vietnam</div>
+        <h3>🏬 Center tools <span style="font-size:.72rem;color:var(--amber)">(PC-first)</span></h3>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>DotB EMS</b> 39k/mo</span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>Easy Edu</b></span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>PSE One</b> 199k–1M</span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>Center Pro</b> free→15M</span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>SMAS Viettel</b> free</span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>iLeader</b> 45M+</span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>Mona eLMS</b></span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>DayTot</b> 149k</span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>LopHoc</b> AI</span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>ClassHub</b></span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>KLASSA</b></span>
+        <span class="chip"><span class="dot" style="background:var(--rose)"></span><b>GoEdu</b> 149k</span>
+      </div>
+    </div>
+    <div class="empty-note" style="margin-top:16px">
+      <b>∅ The empty center:</b> no app spans the student ↔ tutor ↔ parent triangle on one thread. Every player owns one corner. The center is ours to claim.
+    </div>
+  </section>
+
+  <!-- 2. B2C comparison -->
+  <section>
+    <div class="sec-head"><span class="idx">2</span> B2C Student Planners</div>
+    <div class="sec-sub">Direct competitors on App Store + Google Play — fragmented, no clear winner</div>
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr><th>App</th><th>Rating</th><th>Price</th><th>Offline</th><th>What's broken (quoted)</th><th>Learn</th><th>Don't copy</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-name">MyStudyLife</td><td class="num">4.7★</td><td class="num">Free</td><td>✅</td>
+            <td class="bad">Data loss after 2024 redesign ("completely blank"); AI timetable glitchy; forced re-login; $50/yr wall</td>
+            <td class="learn">Cross-platform reach; free core</td>
+            <td class="ncopy">Data-destroying redesigns; broken AI; paywall creep; bloat</td>
+          </tr>
+          <tr>
+            <td class="col-name">iStudiez Pro</td><td class="num">—</td><td class="num">Paid</td><td>—</td>
+            <td class="bad">💀 <b>Shut down 2024–26</b> — users orphaned, searching for a replacement</td>
+            <td class="learn">Its users are yours to win</td>
+            <td class="ncopy">Abandonment; sync blocking the UI</td>
+          </tr>
+          <tr>
+            <td class="col-name">Weeklie</td><td class="num">—</td><td class="num">Free + 1×</td><td>✅</td>
+            <td class="bad">Timetable-only (no assignments/grades)</td>
+            <td class="learn">No account; offline; A/B weeks; one-time payment; widgets</td>
+            <td class="ncopy">Staying timetable-only</td>
+          </tr>
+          <tr>
+            <td class="col-name">Student Trove</td><td class="num">4.7★</td><td class="num">Freemium</td><td>✅</td>
+            <td class="bad">New (1K+ downloads); "keeps logging me out"</td>
+            <td class="learn">Local-first encrypted; offline OCR import; accessibility; HS/uni modes</td>
+            <td class="ncopy">Unproven at scale</td>
+          </tr>
+          <tr>
+            <td class="col-name">ClassUp</td><td class="num">4.3★</td><td class="num">Free</td><td>—</td>
+            <td class="bad">Black screen on signup; schedule only on first device; day-range bugs</td>
+            <td class="learn">—</td>
+            <td class="ncopy">Broken signup; unreliable sync</td>
+          </tr>
+          <tr>
+            <td class="col-name">myHomework / Power Planner / Egenda / Lịch Học (VN)</td><td class="num">~4.5★</td><td class="num">Free–$4.99</td><td>✅</td>
+            <td class="bad">Feature-light or dated UI</td>
+            <td class="learn">Lịch Học: VN-native (flashcards, study groups)</td>
+            <td class="ncopy">Thin features; dated design</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. VN B2B comparison -->
+  <section>
+    <div class="sec-head"><span class="idx">3</span> Vietnam B2B Center Tools</div>
+    <div class="sec-sub">Web-first incumbents — the monetization benchmark and the mobile gap</div>
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr><th>Tool</th><th>Price (VND/mo)</th><th>Mobile?</th><th>Weaknesses</th><th>Learn</th><th>Don't copy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="col-name">DotB EMS</td><td class="num">39k/student</td><td>Web + app</td><td class="bad">PC-first admin; 150+ feature bloat</td><td class="learn">Feature depth; big-center credibility</td><td class="ncopy">Per-student pricing; bloat</td></tr>
+          <tr><td class="col-name">Easy Edu</td><td class="num">~60k/user</td><td>✅ iOS/Android</td><td class="bad">Financial-heavy</td><td class="learn">Financial management</td><td class="ncopy">Per-user opacity</td></tr>
+          <tr><td class="col-name">PSE One</td><td class="num">199k–1M</td><td>Web + apps</td><td class="bad">Tiered ladder complexity</td><td class="learn">CRM/ERP breadth</td><td class="ncopy">Price ladder</td></tr>
+          <tr><td class="col-name">Center Pro</td><td class="num">Free–15M (lifetime)</td><td>Web + Zalo Mini App</td><td class="bad">5-tier pricing confusion</td><td class="learn">Zalo Mini App for teachers; free tier; lifetime</td><td class="ncopy">Tier confusion</td></tr>
+          <tr><td class="col-name">SMAS Viettel</td><td class="num">FREE</td><td>✅ app</td><td class="bad">K-12 gov focus (wrong buyer)</td><td class="learn">250 features; scale</td><td class="ncopy">School-only focus</td></tr>
+          <tr><td class="col-name">iLeader</td><td class="num">45M+ one-time</td><td>✅ apps</td><td class="bad">Very expensive for solo/small</td><td class="learn">Full vertical coverage</td><td class="ncopy">Price; complexity</td></tr>
+          <tr><td class="col-name">Mona eLMS</td><td class="num">10M+</td><td>✅ apps</td><td class="bad">Slow support (complaints)</td><td class="learn">LMS + center mgmt</td><td class="ncopy">Support model</td></tr>
+          <tr><td class="col-name">DayTot</td><td class="num">149k–499k</td><td>Mobile-first</td><td class="bad">New; teacher-only role</td><td class="learn">Solo teacher 149k; 30-day trial</td><td class="ncopy">Single-role focus</td></tr>
+          <tr><td class="col-name">LopHoc.app</td><td class="num">990k–1.99M/yr</td><td>Mobile-first</td><td class="bad">Year-only billing</td><td class="learn">AI + SePay QR; mobile-first solo tutor</td><td class="ncopy">Year-only lock</td></tr>
+          <tr><td class="col-name">ClassHub</td><td class="num">—</td><td>✅ iOS/Android</td><td class="bad">New (2026), unproven</td><td class="learn">QR attendance; AI assistant; mobile-first</td><td class="ncopy">—</td></tr>
+          <tr><td class="col-name">KLASSA</td><td class="num">Not public</td><td>—</td><td class="bad">Price hidden; niche lock</td><td class="learn">Parent portal + LMS for dạy-thêm</td><td class="ncopy">Niche-only</td></tr>
+          <tr><td class="col-name">GoEdu</td><td class="num">149k+</td><td>✅ iOS/Android</td><td class="bad">—</td><td class="learn">Low entry + mobile app</td><td class="ncopy">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="empty-note" style="margin-top:14px">
+      <b>Pattern:</b> VN incumbents = PC-first, expensive (up to 45M VND), complex onboarding, vendor-dependent data export, dated UI. <span class="learn">Our wedge: mobile-first, below 149k–199k/mo, flat pricing, self-serve.</span>
+    </div>
+  </section>
+
+  <!-- 4. Global B2B comparison -->
+  <section>
+    <div class="sec-head"><span class="idx">4</span> Global B2B Tutor Tools</div>
+    <div class="sec-sub">The "no mobile" wedge — 7 of 8 are web-only</div>
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr><th>Tool</th><th>Price (USD)</th><th>Mobile?</th><th>Billing model</th><th>Complaints</th><th>Learn</th><th>Don't copy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="col-name">TutorCruncher</td><td class="num">$30–240 + fees</td><td class="bad">❌ Web</td><td>% of revenue</td><td class="bad">Not intuitive; invoice edit → double fees; slow fixes; EN-only</td><td class="learn">Split-payment; ISO 27001</td><td class="ncopy">% fees; complex UX; EN-only</td></tr>
+          <tr><td class="col-name">Teachworks</td><td class="num">$16.49 + $0.32/lesson</td><td class="bad">❌ Web <span class="warn">(156 votes "not planned")</span></td><td>Per-lesson</td><td class="bad">No mobile (deliberate); 60+ add-ons; per-lesson surprises</td><td class="learn">Per-tutor management layer; 70+ integrations</td><td class="ncopy">No mobile; add-on paralysis; per-lesson scaling</td></tr>
+          <tr><td class="col-name">Classcard</td><td class="num">$99/199/349</td><td class="warn">Apps = $249/mo add-on</td><td>Flat</td><td class="bad">Mobile is an upsell, not included</td><td class="learn">Flat pricing; family billing; lead→enroll one action; retries</td><td class="ncopy">Charging extra for mobile; gating basics</td></tr>
+          <tr><td class="col-name">Tutorbase</td><td class="num">Free + 1%</td><td class="bad">❌ Web</td><td>% of revenue</td><td class="bad">No mobile at all</td><td class="learn">"Find Slot" AI suggestion</td><td class="ncopy">Web-only; % of revenue</td></tr>
+          <tr><td class="col-name">TutorBird</td><td class="num">$16.95</td><td class="bad">❌ Web</td><td>Flat</td><td class="bad">Web-only; slow features; no multi-staff; single timezone; no split billing</td><td class="learn">Same-day setup; free tier 10 students</td><td class="ncopy">Ignoring community requests; single timezone</td></tr>
+          <tr><td class="col-name">Oases</td><td class="num">$99–399</td><td class="warn">"Mobile access" only</td><td>Flat by size</td><td class="bad">"Data entry not straightforward on phones"</td><td class="learn">Tiering; reporting depth</td><td class="ncopy">Mobile as afterthought</td></tr>
+          <tr><td class="col-name">Wise</td><td class="num">$0.69/session</td><td>✅ White-label apps</td><td>Per-session, 0% fee</td><td class="bad">—</td><td class="learn">White-label apps; auto payouts; session-linked billing</td><td class="ncopy">Per-session at scale</td></tr>
+          <tr><td class="col-name">Fons</td><td class="num">Custom</td><td>—</td><td>Custom</td><td class="bad">—</td><td class="learn">Cancellation enforcement; recurring billing</td><td class="ncopy">Custom price opacity</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. Gap chasm -->
+  <section>
+    <div class="sec-head"><span class="idx">5</span> The Gap Chasm</div>
+    <div class="sec-sub">Saturated layers vs. open wedges — our bridge spans them</div>
+    <div class="chasm">
+      <h3>🏜️ Saturated (don't fight here) &nbsp;→&nbsp; 🌱 Open (claim these)</h3>
+      <div class="chasm-grid">
+        <div class="chasm-col left">
+          <h4>⛔ Saturated</h4>
+          <div class="chasm-item sat"><b>Web-only tutor/center admin</b><br>7/8 global + most VN tools</div>
+          <div class="chasm-item sat"><b>Zalo as notification channel</b><br>Daytot, CenterPro, MONA, Halozend</div>
+          <div class="chasm-item sat"><b>K-12 face-ID attendance</b><br>VNPT vnFace: 20K schools, 6M students</div>
+          <div class="chasm-item sat"><b>Generic VN payroll</b><br>BetterHR, MiHCM, PayDD (domain-blind)</div>
+          <div class="chasm-item sat"><b>Solo-tutor CRM</b><br>Zutor, TutorSolo, Classentra ("10-min setup")</div>
+        </div>
+        <div class="bridge">BRIDGE<br>one engine</div>
+        <div class="chasm-col right">
+          <h4>✅ Open wedges</h4>
+          <div class="chasm-item open"><b>Native mobile for tutor-side admin</b><br>#1 complaint across every platform</div>
+          <div class="chasm-item open"><b>Student ↔ tutor ↔ parent on one thread</b><br>no player spans the triangle</div>
+          <div class="chasm-item open"><b>Zalo Mini App parent portal</b><br>zero-install; VUS: 4× lead quality</div>
+          <div class="chasm-item open"><b>VN payment rails</b><br>package → VietQR → MoMo/ZaloPay T+0 → payroll split</div>
+          <div class="chasm-item open"><b>Offline-first reliability</b><br>never loses data; works on 3G commutes</div>
+          <div class="chasm-item open"><b>AI timetable that actually works</b><br>with explanation, not glitches</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Learn / Not copy -->
+  <section>
+    <div class="sec-head"><span class="idx">6</span> Learn vs. Don't Copy</div>
+    <div class="two-col">
+      <div class="card learn">
+        <h3>✓ What to LEARN</h3>
+        <ul>
+          <li>Weeklie <small>Offline, no account, one-time payment, no subscription creep</small></li>
+          <li>Student Trove <small>Local-first encrypted storage; offline OCR import; accessibility</small></li>
+          <li>Classcard <small>Flat transparent pricing; family billing; lead→enrolled in one action</small></li>
+          <li>TutorBird <small>Same-day setup speed; simple solo invoicing; free tier</small></li>
+          <li>VUS × Zalo <small>Mini App + ZNS: 4× lead quality, +26pp interaction, −30% data processing</small></li>
+          <li>VN mobile entrants <small>Zalo Mini App for teachers; SePay/VietQR; QR attendance; 30-day trials</small></li>
+          <li>MoMo Payroll API + VietQR <small>T+0 payouts; VietQR-embedded PDF invoices</small></li>
+          <li>Face-ID (Daytot/CenterUp) <small>Bring school-grade face-ID to the tutoring tier (sub-2s)</small></li>
+          <li>Power Planner <small>GPA/goal calculator as engagement hook</small></li>
+        </ul>
+      </div>
+      <div class="card ncopy">
+        <h3>✕ What NOT to copy</h3>
+        <ul>
+          <li>MyStudyLife <small>Data-destroying redesigns; broken AI; paywall creep; forced re-login; bloat</small></li>
+          <li>iStudiez Pro <small>Abandonment; sync blocking the UI; no offline write-conflict handling</small></li>
+          <li>TutorCruncher <small>%-of-revenue fees; non-intuitive UX; English-only; slow bug fixes</small></li>
+          <li>Teachworks <small>"Mobile app not planned"; 60+ add-on paralysis; per-lesson pricing surprises</small></li>
+          <li>Classcard <small>$249/mo extra for branded apps (mobile = upsell)</small></li>
+          <li>Zalo-as-notification-only <small>Broadcast channel instead of primary parent UX</small></li>
+          <li>PC-first admin <small>Desktop-bound management with limited mobile admin</small></li>
+          <li>Enterprise pricing + sales-led onboarding <small>45M VND iLeader; contact-only MISA</small></li>
+          <li>Web-only everything <small>The global B2B tier's cardinal sin</small></li>
+          <li>Per-student / per-lesson / %-of-revenue pricing <small>All punish growth; opacity breeds churn</small></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Build roadmap -->
+  <section>
+    <div class="sec-head"><span class="idx">7</span> Build Order — 4 Phases</div>
+    <div class="sec-sub">Each phase enables the next one's growth loop</div>
+    <div class="roadmap">
+      <div class="phase">
+        <div class="pnum">P1</div>
+        <span class="tag free">FREE · FOUNDATION</span>
+        <h4>Student app core</h4>
+        <p>General schedule engine (typed events); offline-first, local encrypted; no-data-loss guarantee; reliable sync; simple UX; VN + EN; widgets.</p>
+        <div class="arrow">→</div>
+      </div>
+      <div class="phase">
+        <div class="pnum">P2</div>
+        <span class="tag paid">MONETIZE</span>
+        <h4>Tutor mode</h4>
+        <p>Role toggle; attendance (QR/face-ID); package tracking; VietQR + MoMo/ZaloPay billing; student↔tutor invite loop.</p>
+        <div class="arrow">→</div>
+      </div>
+      <div class="phase">
+        <div class="pnum">P3</div>
+        <span class="tag viral">VIRAL</span>
+        <h4>Parent channel</h4>
+        <p>Zalo Mini App (VN) + WhatsApp Business (global): read-only schedule, alerts, payments, auto AI parent reports in Vietnamese.</p>
+        <div class="arrow">→</div>
+      </div>
+      <div class="phase">
+        <div class="pnum">P4</div>
+        <span class="tag scale">SCALE</span>
+        <h4>Payroll + AI</h4>
+        <p>Small-center payroll (PIT/BHXH split); AI timetable with explanation; conflict bot; WhatsApp/Zalo reminders.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Key numbers -->
+  <section>
+    <div class="sec-head"><span class="idx">8</span> Numbers That Matter</div>
+    <div class="strip">
+      <div class="stat"><div class="v">7/8</div><div class="l">Global B2B tools are web-only — no native mobile</div></div>
+      <div class="stat"><div class="v">156</div><div class="l">Upvotes for mobile app on Teachworks — answer: "Not planned"</div></div>
+      <div class="stat"><div class="v">4×</div><div class="l">Lead quality via Zalo Mini App + ZNS (VUS case study)</div></div>
+      <div class="stat"><div class="v">20K</div><div class="l">Schools on VNPT vnFace — face-ID saturated in schools, open in tutoring</div></div>
+      <div class="stat"><div class="v">$249/mo</div><div class="l">Classcard charges EXTRA for branded mobile apps</div></div>
+      <div class="stat"><div class="v">149k₫</div><div class="l">VN market floor (DayTot/GoEdu) — our pricing target: below it, flat</div></div>
+      <div class="stat"><div class="v">0</div><div class="l">Apps spanning student–tutor–parent on one thread</div></div>
+      <div class="stat"><div class="v">💀</div><div class="l">iStudiez Pro shut down — orphaned users looking for a home</div></div>
+    </div>
+  </section>
+
+  <!-- 9. Synthesis -->
+  <section>
+    <div class="synthesis">
+      <h2>🎯 The Play</h2>
+      <p class="lead">One engine. Two roles. Three windows. Built in the order that compounds.</p>
+      <div class="syn-grid">
+        <div class="syn-card a">
+          <div class="letter">A</div>
+          <h4>Zalo-native tutor triangle</h4>
+          <p>VN-first. Parent on Zalo Mini App, tutor in-app, student in-app — one thread per student. Beats Daytot/CenterPro/CenterUp which treat Zalo as a notification channel.</p>
+        </div>
+        <div class="syn-card b">
+          <div class="letter">B</div>
+          <h4>Solo tutor on rails</h4>
+          <p>Global expansion arc. 10-minute setup, auto-invoicing, WhatsApp Business backbone — versus web-only Zutor/Tutorbase/TutorSolo.</p>
+        </div>
+        <div class="syn-card c">
+          <div class="letter">C</div>
+          <h4>Offline-first planner</h4>
+          <p>Emerging markets. Reliable on intermittent 3G, never loses data — versus broken MyStudyLife and defunct iStudiez. Zegju proved it: offline-first enrolled half of Ethiopia's freshmen.</p>
+        </div>
+      </div>
+      <div class="anti">
+        <b>Anti-targets — where NOT to compete:</b>
+        <div class="anti-tags">
+          <span class="chip">Enterprise chains &gt;50 tutors <small style="display:inline">TutorCruncher / Wise / Alinaflow</small></span>
+          <span class="chip">K-12 school face-ID <small style="display:inline">VNPT vnFace / SchoolX / VIETSCHOOL</small></span>
+          <span class="chip">AI handwriting grading <small style="display:inline">IntelGrader</small></span>
+          <span class="chip">Pure booking <small style="display:inline">Calendly / Setmore / Square</small></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    ScheduleScope · Generated from brainstorming session <code>brainstorm-competitor-analysis-student-schedule-2026-08-20</code><br>
+    Source: <code>_bmad-output/brainstorming/brainstorm-competitor-analysis-student-schedule-2026-08-20/.memlog.md</code>
+  </footer>
+
+</div>
+</body>
+</html>
