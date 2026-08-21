@@ -3,7 +3,13 @@ using ScheduleManagement.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.Services.AddApiVersioning()
+.AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+})
+.AddOpenApi();
+
 builder.Services.AddControllers();
 
 // Dependency Injection
@@ -17,7 +23,16 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.MapOpenApi().WithDocumentPerVersion();
+    app.UseSwaggerUI(options =>
+    {
+        foreach (var description in app.DescribeApiVersions().Reverse())
+        {
+            options.SwaggerEndpoint(
+                $"/openapi/{description.GroupName}.json",
+                description.GroupName.ToUpperInvariant());
+        }
+    });
 }
 
 app.UseHttpsRedirection(); // Middleware
