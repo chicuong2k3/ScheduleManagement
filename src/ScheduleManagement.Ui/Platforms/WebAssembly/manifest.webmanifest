@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "ScheduleManagement.Ui",
+  "display": "standalone",
+  "name": "ScheduleManagement.Ui",
+  "short_name": "ScheduleManagement.Ui",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}

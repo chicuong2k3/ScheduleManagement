@@ -62,3 +62,6 @@ coverage/
 # ===== Publish output =====
 publish/
 *.publish.xml
+
+# ===== OpenCode =====
+.omo/
