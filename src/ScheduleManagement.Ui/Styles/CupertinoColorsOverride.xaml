@@ -1,0 +1,21 @@
+<!-- Brand palette override for Uno Cupertino.
+     Default Cupertino uses iOS HIG system colors (blue accent).
+     This maps the brand accent to the ScheduleManagement purple.
+     Structure mirrors Uno.Cupertino/Styles/Application/ColorPalette.xaml (Light + Default). -->
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <ResourceDictionary.ThemeDictionaries>
+    <ResourceDictionary x:Key="Light">
+      <!-- Brand accent (replaces iOS system blue) -->
+      <Color x:Key="CupertinoBlueColor">#5946D2</Color>
+      <Color x:Key="LinkColor">#5946D2</Color>
+      <!-- Brand purple family -->
+      <Color x:Key="CupertinoPurpleColor">#6750A4</Color>
+    </ResourceDictionary>
+    <ResourceDictionary x:Key="Default">
+      <Color x:Key="CupertinoBlueColor">#C7BFFF</Color>
+      <Color x:Key="LinkColor">#C7BFFF</Color>
+      <Color x:Key="CupertinoPurpleColor">#D0BCFF</Color>
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

@@ -2,14 +2,8 @@ namespace ScheduleManagement.Ui.Presentation;
 
 public partial record MainModel
 {
-    private INavigator _navigator;
-
-    public MainModel(
-        IStringLocalizer localizer,
-        IOptions<AppConfig> appInfo,
-        INavigator navigator)
+    public MainModel(IStringLocalizer localizer, IOptions<AppConfig> appInfo)
     {
-        _navigator = navigator;
         Title = "Main";
         Title += $" - {localizer["ApplicationName"]}";
         Title += $" - {appInfo?.Value?.Environment}";
@@ -17,12 +11,21 @@ public partial record MainModel
 
     public string? Title { get; }
 
-    public IState<string> Name => State<string>.Value(this, () => string.Empty);
+    public IState<bool> IsSheetOpen => State<bool>.Value(this, () => false);
 
-    public async Task GoToSecond()
+    public async Task ToggleSheet()
     {
-        var name = await Name;
-        await _navigator.NavigateViewModelAsync<SecondModel>(this, data: new Entity(name!));
+        await IsSheetOpen.UpdateValue(current => !current.SomeOrDefault(false), CancellationToken.None);
     }
 
+    public async Task SaveEvent()
+    {
+        // TODO: persist the new event and refresh the schedule list
+        await IsSheetOpen.UpdateValue(_ => false, CancellationToken.None);
+    }
+
+    public async Task CancelEvent()
+    {
+        await IsSheetOpen.UpdateValue(_ => false, CancellationToken.None);
+    }
 }

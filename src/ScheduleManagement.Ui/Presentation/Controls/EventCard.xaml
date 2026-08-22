@@ -1,0 +1,49 @@
+<UserControl x:Class="ScheduleManagement.Ui.Presentation.Controls.EventCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root">
+
+  <!-- Fantastical-style event card: colored time block + bold title.
+       Rounded 16px card on a soft surface, 1px separator border. -->
+  <Border CornerRadius="16"
+          Background="{ThemeResource BackgroundBrush}"
+          BorderBrush="{ThemeResource CupertinoSeparatorBrush}"
+          BorderThickness="1"
+          Padding="12">
+    <Grid ColumnSpacing="12" ColumnDefinitions="Auto,*">
+      <!-- Colored time block -->
+      <Border Grid.Column="0"
+              CornerRadius="12"
+              Padding="12,10"
+              MinWidth="84"
+              Background="{Binding AccentBrush, ElementName=Root}">
+        <StackPanel Spacing="2" HorizontalAlignment="Center">
+          <TextBlock Text="{Binding StartTime, ElementName=Root}"
+                     Foreground="White"
+                     FontSize="15"
+                     FontWeight="SemiBold"
+                     HorizontalAlignment="Center" />
+          <TextBlock Text="{Binding EndTime, ElementName=Root}"
+                     Foreground="White"
+                     Opacity="0.85"
+                     FontSize="12"
+                     HorizontalAlignment="Center" />
+        </StackPanel>
+      </Border>
+
+      <!-- Title + subtitle -->
+      <StackPanel Grid.Column="1"
+                  VerticalAlignment="Center"
+                  Spacing="4">
+        <TextBlock Text="{Binding Title, ElementName=Root}"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   TextTrimming="CharacterEllipsis" />
+        <TextBlock Text="{Binding Subtitle, ElementName=Root}"
+                   FontSize="13"
+                   Foreground="{ThemeResource CupertinoSecondaryLabelBrush}"
+                   TextTrimming="CharacterEllipsis" />
+      </StackPanel>
+    </Grid>
+  </Border>
+</UserControl>
